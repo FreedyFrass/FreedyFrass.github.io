@@ -1,0 +1,233 @@
+<link rel="stylesheet" href="css/Python.css">
+<h1>This is a Snake Game built with Python</h1>
+<h2>This is the code ↓</h2>
+<h3>import tkinter as hi
+import random
+
+# =====================
+# SETTINGS
+# =====================
+WIDTH = 1550
+HEIGHT = 895
+GRID = 20
+START_SPEED = 120
+
+BG = "#111111"
+BTN = "#222222"
+BTN_HOVER = "#333333"
+SNAKE = "#00ff88"
+HEAD = "#00ffaa"
+FOOD = "#ff3355"
+TEXT = "white"
+
+# =====================
+# WINDOW
+# =====================
+root = hi.Tk()
+root.title("🔥 Snake Battle Royale")
+root.geometry(f"{WIDTH}x{HEIGHT}")
+root.configure(bg=BG)
+
+# =====================
+# MENU SCREEN
+# =====================
+menu_frame = hi.Frame(root, bg=BG)
+menu_frame.pack(fill="both", expand=True)
+
+title = hi.Label(menu_frame, text="🔥 Snake Battle Royale",
+                 fg="white", bg=BG,
+                 font=("Courier New", 60, "bold"))
+title.pack(pady=100)
+
+def start_game():
+    menu_frame.pack_forget()
+    game_frame.pack(fill="both", expand=True)
+    restart_game()
+
+play_button = hi.Button(menu_frame, text="PLAY",
+                        font=("Arial", 25, "bold"),
+                        bg=BTN, fg="white",
+                        width=15, height=2,
+                        bd=0,
+                        command=start_game)
+play_button.pack(pady=20)
+
+# =====================
+# GAME FRAME
+# =====================
+game_frame = hi.Frame(root, bg=BG)
+canvas = hi.Canvas(game_frame, width=WIDTH,
+                   height=HEIGHT, bg=BG,
+                   highlightthickness=0)
+canvas.pack()
+
+# =====================
+# GAME VARIABLES
+# =====================
+snake = []
+direction = "Right"
+food = None
+score = 0
+speed = START_SPEED
+game_over = False
+paused = False
+
+
+def spawn_food():
+    return (
+        random.randint(0, (WIDTH // GRID) - 1) * GRID,
+        random.randint(0, (HEIGHT // GRID) - 1) * GRID
+    )
+
+
+def restart_game(event=None):
+    global snake, direction, food, score, speed, game_over, paused
+
+    snake = [(200, 200), (180, 200), (160, 200)]
+    direction = "Right"
+    food = spawn_food()
+    score = 0
+    speed = START_SPEED
+    game_over = False
+    paused = False
+
+    move_snake()
+
+
+def change_direction(event):
+    global direction
+    if game_over or paused:
+        return
+
+    if event.keysym == "Up" and direction != "Down":
+        direction = "Up"
+    elif event.keysym == "Down" and direction != "Up":
+        direction = "Down"
+    elif event.keysym == "Left" and direction != "Right":
+        direction = "Left"
+    elif event.keysym == "Right" and direction != "Left":
+        direction = "Right"
+
+
+def toggle_pause(event=None):
+    global paused
+
+    if game_over:
+        return
+
+    paused = not paused
+
+    if paused:
+        canvas.create_text(
+            WIDTH//2, HEIGHT//2,
+            text="PAUSED",
+            fill="yellow",
+            font=("Arial", 50, "bold"),
+            tag="pause_text"
+        )
+    else:
+        canvas.delete("pause_text")
+        move_snake()
+
+
+root.bind("<Key>", change_direction)
+root.bind("r", restart_game)
+root.bind("p", toggle_pause)
+
+# =====================
+# DRAW
+# =====================
+def draw():
+    canvas.delete("all")
+
+    # Food
+    canvas.create_rectangle(
+        food[0], food[1],
+        food[0] + GRID, food[1] + GRID,
+        fill=FOOD, outline=""
+    )
+
+    # Snake
+    for i, segment in enumerate(snake):
+        color = HEAD if i == 0 else SNAKE
+        canvas.create_rectangle(
+            segment[0], segment[1],
+            segment[0] + GRID, segment[1] + GRID,
+            fill=color, outline=""
+        )
+
+    # Score
+    canvas.create_text(
+        100, 30,
+        text=f"Score: {score}",
+        fill=TEXT,
+        font=("Arial", 20, "bold")
+    )
+
+    if paused:
+        canvas.create_text(
+            WIDTH//2, HEIGHT//2,
+            text="PAUSED",
+            fill="yellow",
+            font=("Arial", 50, "bold"),
+            tag="pause_text"
+        )
+
+
+# =====================
+# GAME LOOP
+# =====================
+def move_snake():
+    global snake, food, score, speed, game_over
+
+    if game_over or paused:
+        return
+
+    x, y = snake[0]
+
+    if direction == "Up":
+        y -= GRID
+    elif direction == "Down":
+        y += GRID
+    elif direction == "Left":
+        x -= GRID
+    elif direction == "Right":
+        x += GRID
+
+    new_head = (x, y)
+
+    # Collision
+    if (
+        new_head in snake or
+        x < 0 or x >= WIDTH or
+        y < 0 or y >= HEIGHT
+    ):
+        game_over = True
+        canvas.create_text(
+            WIDTH//2, HEIGHT//2 - 40,
+            text="GAME OVER",
+            fill="red",
+            font=("Arial", 50, "bold")
+        )
+        canvas.create_text(
+            WIDTH//2, HEIGHT//2 + 20,
+            text="Press R to Restart",
+            fill="white",
+            font=("Arial", 25)
+        )
+        return
+
+    snake.insert(0, new_head)
+
+    if new_head == food:
+        score += 1
+        speed = max(50, speed - 2)
+        food = spawn_food()
+    else:
+        snake.pop()
+
+    draw()
+    root.after(speed, move_snake)
+
+
+root.mainloop()</h3>

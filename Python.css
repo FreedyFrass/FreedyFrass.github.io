@@ -1,0 +1,14 @@
+
+background {
+    background-image: url('images/Python-logo.png');
+    background-color: #3b69ff;
+}
+h1 {
+    font-size:large;
+    font-weight: bold;
+}
+h2 {
+    font-size: medium;
+    font-weight: bold;
+}
+

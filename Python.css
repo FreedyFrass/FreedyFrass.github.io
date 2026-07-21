@@ -3,6 +3,28 @@ background {
     background-image: url('images/Python-logo.png');
     background-color: #3b69ff;
 }
+.top-right-box {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 80px;
+    height: 40px;
+    background-color: #144e8f;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+.top-right-box:hover {
+    background-color: #0d3a6b;
+}
 h1 {
     font-size:large;
     font-weight: bold;

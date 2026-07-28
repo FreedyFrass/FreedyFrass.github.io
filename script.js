@@ -6,8 +6,10 @@ function activate() {
 }
 
 background.oneclick = function change() {
-    background.style.backgroundColor = "lightcoral";
-    background.style.color = "lightleaf";
+const background = document.body; 
+background.style.backgroundColor = "lightcoral";
+background.style.color = "lightgreen"; 
+
 }
 function hideButton() {
   document.getElementById('hideBtn').style.display = 'none';

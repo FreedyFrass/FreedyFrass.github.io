@@ -10,7 +10,3 @@ function hideButton() {
     document.body.style.backgroundColor = "lightcoral";
     document.body.style.color = "lightgreen";
 }
-
-function hideButton() {
-  document.getElementById('hideBtn').style.display = 'none';
-}
